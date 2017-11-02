@@ -1,0 +1,85 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+
+<head>
+    <title>p5js Template</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.5.3/p5.js"></script>
+    
+    <script>
+    //creating variables
+    var r,g,b
+    var shapeChange = false
+    var flat
+    var grow
+    
+        function setup() {
+          //intializing variables
+            createCanvas(800,600)
+            flat = 40
+            grow = 40
+            r = random(0,255)
+            g = random(0,255)
+            b = random(0,255)
+            rectMode(CENTER)
+        }
+        //making the background and shapes follow the mouse
+      function draw() {
+        background(r,g,b,10)
+        fill(r,g,b)
+        if (shapeChange == false) {
+          ellipse(mouseX,mouseY,flat,grow)
+        } else {
+          rect(mouseX,mouseY,flat,grow)
+        } 
+      }
+      
+      //making the shapes change when mouse is pressed
+      function mousePressed() {
+        r = random(0,255)
+        g = random(0,255)
+        b = random(0,255)
+        if (shapeChange == false) {
+          shapeChange = true
+        } else {
+          shapeChange = false
+        }
+      }
+      
+      //making the shapes shape change when arrow keys pressed
+      function keyPressed() {
+        
+         if (keyCode == 37) {//left arrow
+          flat-=5
+        }
+        if (keyCode == 39) {//right arrow
+          flat+=5
+        }
+        if (keyCode == 38) {//up arrow
+          flat+=5
+          grow+=5
+        }
+        if (keyCode == 40) {//down arrow
+          flat-=5
+          grow-=5
+        }
+      }
+      
+      
+    </script>
+</head>
+
+<body>
+    <div id="code" class="container-fluid">
+        <script src="https://gist-it.appspot.com/github/bairul6154/p5js/blob/gh-pages/interation-project.html?footer=0"></script>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+    <script>
+        $(window).bind("load", function() {
+            $('#code').before($('#defaultCanvas0').remove());
+        });
+    </script>
+</body>
+
+
+</html>
