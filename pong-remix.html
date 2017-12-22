@@ -1,0 +1,156 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+
+<head>
+    <title>Pong</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.4.13/p5.js"></script>
+    <script>
+        //creates all the variables for this project
+        var hit = [];
+        var hit2 = [];
+        var r, g, b
+        var ballX;
+        var ballY;
+        var ballSpeedX = 0;
+        var ballSpeedY = 0;
+        var paddleHeight = 30;
+        var paddleWidth = 200;
+
+        function setup() {
+            r = random(255)
+            g = random(255)
+            b = random(255)
+            //creates the canvas
+            createCanvas(800, 600);
+            textAlign(CENTER)
+            textSize(100)
+            //puts the ball in a random position in the middle
+            ballX = random(width);
+            ballY = height / 2;
+            //hides the cursor when inside canvas
+            noCursor();
+            //puts the coordinates of the bricks inside the "hit" array which can be called later
+            for (var i = 0; i <= 15; i++) {
+                append(hit, i * 50)
+                append(hit2, i * 50)
+            }
+        }
+
+        function draw() {
+            //draws all the functions created below
+            background(128);
+            moveBall();
+            checkCollide();
+            drawPaddle();
+            drawBall();
+            //draws all the bricks using the "hit" array
+            for (var i = 0; i <= 15; i++) {
+                bricks(hit[i], 20)
+            }
+            for (var i = 0; i <= 15; i++) {
+                bricks(hit2[i], 40)
+            }
+        }
+
+        function moveBall() {
+            //the function that makes the ball move
+            ballX += ballSpeedX;
+            ballY += ballSpeedY;
+        }
+
+        function checkCollide() {
+            //makes the ball bounce when touching left or right side of the canvas
+            if (ballX < 0 || ballX > width) {
+                ballSpeedX *= -1;
+            }
+            //bounce off of the top side of canvas
+            if (ballY < 0) {
+                ballSpeedY *= -1;
+            }
+            //bounces when touching the paddle, but if missed it will end the game
+            if (ballY > height - paddleHeight) {
+                if (ballX < mouseX + 200 && ballX > mouseX) {
+                    //makes the ball move faster to be a challenge
+                    ballSpeedX *= 1.1
+                    ballSpeedX = constrain(ballSpeedX, -10, 10)
+                    ballSpeedY *= 1.1
+                    ballSpeedY = constrain(ballSpeedY, -10, 10)
+                    //shortens the paddle to make it more challenging
+                    paddleWidth -= 5
+                    ballSpeedY *= -1
+                    //color
+                    r = random(255)
+                    g = random(255)
+                    b = random(255)
+                }
+                else {
+                    text("GAME OVER!", width / 2, height / 2);
+                    noLoop();
+                }
+            }
+        }
+
+        function drawBall() {
+            //draws the ball
+            fill(r, g, b)
+            ellipse(ballX, ballY, 20, 20);
+            fill(255)
+        }
+
+        function drawPaddle() {
+            //draws the paddle
+            strokeWeight(4);
+            rect(mouseX, height - paddleHeight - 4, paddleWidth, paddleHeight);
+        }
+
+        function mousePressed() {
+            //makes it so that the game doesn't start until the player clicks the mouse
+            if (ballSpeedX == 0) {
+                ballSpeedX = 5
+                ballSpeedY = 5
+            }
+        }
+
+        function bricks(x, y) {
+            //function that creates all the bricks
+            //creates 1 brick
+            rect(x, y, 50, 20)
+            //makes the ball bounce off the brick when touching it
+            if (ballX < x + 50 && ballX > x && ballY < y + 20 && ballY > y) {
+                ballSpeedY *= -1;
+                //makes the ball disappear when touched the bricks
+                //the splice does the job
+                for (i = 0; i <= 15; i++) {
+                    if (ballX >= hit[i] && ballX <= hit[i] + 50 && ballY <= 40 && ballY >= 20) {
+                        hit.splice(i, 1)
+                    }
+                    if (ballX >= hit2[i] && ballX <= hit2[i] + 50 && ballY <= 60 && ballY >= 40) {
+                        hit2.splice(i, 1)
+                    }
+                }
+            }
+            if (hit.length == 0 && hit2.length == 0) {
+                background(128)
+                text('YOU WIN!', width / 2, height / 2);
+                noLoop();
+            }
+        }
+    </script>
+</head>
+
+<body>
+<form><input TYPE="button" onClick="history.go(0)" value="Reset"></form>
+    <div id="code" class="container-fluid">
+        <script src="https://gist-it.appspot.com/github/bairul6154/p5js/blob/gh-pages/pong-remix.html?footer=0"></script>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+    <script>
+        $(window).bind("load", function() {
+            $('#code').before($('#defaultCanvas0').remove());
+        });
+    </script>
+</body>
+
+
+</html>
